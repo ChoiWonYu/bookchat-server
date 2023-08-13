@@ -1,5 +1,7 @@
 package bc.bookchat.auth.controller;
 
+import bc.bookchat.auth.controller.dto.LoginRequest;
+import bc.bookchat.auth.controller.dto.LoginResponse;
 import bc.bookchat.auth.controller.dto.SignupRequest;
 import bc.bookchat.auth.controller.dto.SignupResponse;
 import bc.bookchat.auth.service.AuthService;
@@ -26,4 +28,8 @@ public class AuthController {
     return ResponseHandler.generateResponse("회원가입에 성공했습니다.",HttpStatus.CREATED, result);
   }
 
-}
+  @PostMapping("/signin")
+  public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest loginRequest) {
+    String accessToken=authService.login(loginRequest);
+    return ResponseHandler.generateResponse("로그인에 성공했습니다.",HttpStatus.CREATED,new LoginResponse(accessToken));
+  }}
