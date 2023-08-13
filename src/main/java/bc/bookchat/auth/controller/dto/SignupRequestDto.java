@@ -1,5 +1,6 @@
 package bc.bookchat.auth.controller.dto;
 
+import bc.bookchat.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 
 public class SignupRequestDto {
@@ -12,5 +13,13 @@ public class SignupRequestDto {
 
   @NotBlank(message="비밀번호는 필수 입력값입니다.")
   private String password;
+
+  public Member toEntity(){
+    return Member.builder()
+        .email(email)
+        .userName(userName)
+        .password(password)
+        .build();
+  }
 
 }
