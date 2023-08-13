@@ -1,6 +1,6 @@
 package bc.bookchat.auth.controller;
 
-import bc.bookchat.auth.controller.dto.SignupRequestDto;
+import bc.bookchat.auth.controller.dto.SignupRequest;
 import bc.bookchat.auth.controller.dto.SignupResponse;
 import bc.bookchat.auth.service.AuthService;
 import bc.bookchat.common.response.ResponseHandler;
@@ -21,8 +21,8 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/signup")
-  public ResponseEntity<Object> register(@Valid @RequestBody SignupRequestDto signupRequestDto) {
-    SignupResponse result = authService.register(signupRequestDto);
+  public ResponseEntity<Object> register(@Valid @RequestBody SignupRequest signupRequest) {
+    SignupResponse result = authService.register(signupRequest);
     return ResponseHandler.generateResponse("회원가입에 성공했습니다.",HttpStatus.CREATED, result);
   }
 
