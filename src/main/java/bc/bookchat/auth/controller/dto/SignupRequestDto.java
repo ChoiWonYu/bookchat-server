@@ -2,7 +2,11 @@ package bc.bookchat.auth.controller.dto;
 
 import bc.bookchat.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
 public class SignupRequestDto {
 
   @NotBlank(message="이메일은 필수 입력값입니다.")
