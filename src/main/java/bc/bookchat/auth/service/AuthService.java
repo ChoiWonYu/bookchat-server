@@ -35,4 +35,11 @@ public class AuthService {
     return accessToken;
   }
 
+  public Member findMemberByJwt(String token) {
+    String memberFormId = jwtProvider.getPayload(token);
+
+    return memberRepository.findByEmail(memberFormId)
+        .orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+  }
+
 }
