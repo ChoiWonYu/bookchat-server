@@ -1,5 +1,6 @@
 package bc.bookchat.book.controller.dto;
 
+import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.common.type.Document;
 import lombok.Data;
 
@@ -30,5 +31,9 @@ public class BookInfo {
         }
 
         return bookInfo;
+    }
+
+    public MajorBook toEntity(){
+        return new MajorBook(isbn,title,authors[0],thumbnail);
     }
 }
