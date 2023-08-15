@@ -16,6 +16,7 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, Enum> {
         boolean result = false;
         Object[] enumValues = this.annotation.enumClass().getEnumConstants();
         if (enumValues == null) return false;
+        if (value == null) return false;
         for (Object enumValue : enumValues) {
             if (value == enumValue) {
                 result = true;
