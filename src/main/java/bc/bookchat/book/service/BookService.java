@@ -3,8 +3,12 @@ package bc.bookchat.book.service;
 import bc.bookchat.book.controller.dto.BookInfo;
 import bc.bookchat.book.controller.dto.GetBookQuery;
 import bc.bookchat.book.controller.dto.KakaoResponse;
+import bc.bookchat.book.repository.BookRepository;
+import bc.bookchat.common.exception.CustomException;
+import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.common.response.CommonPageInfo;
 import bc.bookchat.common.response.PageResponse;
+import bc.bookchat.common.type.SearchField;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +29,8 @@ public class BookService {
 
     private final RestTemplate restTemplate;
 
+    private final BookRepository bookRepository;
+
     @Value("${kakao.baseurl}")
     private String baseUrl;
 
@@ -34,6 +40,23 @@ public class BookService {
     public PageResponse<BookInfo> getBooksPageResponse(GetBookQuery query) {
         KakaoResponse response= requestToApi(query);
         return convertToCommonPageResponse(query,response);
+    }
+
+    public BookInfo createBook(Long isbn) {
+        BookInfo bookInfo=getBookByIsbn(isbn);
+        bookRepository.save(bookInfo.toEntity());
+        return bookInfo;
+    }
+
+    private BookInfo getBookByIsbn(Long isbn) {
+        GetBookQuery query=new GetBookQuery(String.valueOf(isbn), SearchField.ISBN);
+        KakaoResponse response=requestToApi(query);
+
+        if(response.getDocuments().length<1){
+            throw new CustomException(ErrorCode.INVALID_ISBN);
+        }
+
+        return BookInfo.toBookInfo(response.getDocuments()[0]);
     }
 
     private KakaoResponse requestToApi(GetBookQuery query) {
@@ -58,6 +81,7 @@ public class BookService {
         return new PageResponse(bookInfoList,pageInfo);
 
     }
+
 
 
 }
