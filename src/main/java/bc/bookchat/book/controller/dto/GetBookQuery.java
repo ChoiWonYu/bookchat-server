@@ -19,8 +19,13 @@ public class GetBookQuery {
   private int page=1;
   private int size=3;
 
-  @ValidEnum(enumClass = SearchField.class, message = "유효하지 않은 값입니다.")
-  private SearchField searchField=SearchField.TITLE;
+  @ValidEnum(enumClass = SearchField.class, message = "search field는 필수 입력값입니다.")
+  private SearchField searchField;
+
+  public GetBookQuery(String query,SearchField searchField){
+    this.query=query;
+    this.searchField=searchField;
+  }
 
   public String toUrl(String baseUrl){
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseUrl)
