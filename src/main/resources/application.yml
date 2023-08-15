@@ -13,3 +13,8 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
+
+kakao:
+  secret: ${KAKAO_SECRET}
+  baseurl: ${KAKAO_BASE_URL}
+
