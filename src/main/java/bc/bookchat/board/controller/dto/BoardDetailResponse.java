@@ -28,6 +28,7 @@ public class BoardDetailResponse {
     @Builder
     public BoardDetailResponse(UUID id, String title,Long isbn, String content, Member writer, LocalDateTime createdAt, boolean isMine){
         this.id=id;
+        this.isbn=isbn;
         this.title=title;
         this.writer=writer.getUserName();
         this.content=content;
