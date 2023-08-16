@@ -65,6 +65,7 @@ public class Board extends BaseEntity {
                 .content(content)
                 .createdAt(super.getCreatedAt())
                 .imageUrl(imageUrl)
+                .boardCategory(boardCategory)
                 .build();
     }
 
@@ -77,6 +78,7 @@ public class Board extends BaseEntity {
                 .content(content)
                 .createdAt(super.getCreatedAt())
                 .isMine(member.getId().equals(writer.getId()))
+                .boardCategory(boardCategory)
                 .build();
     }
 

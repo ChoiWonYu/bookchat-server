@@ -1,5 +1,6 @@
 package bc.bookchat.board.controller.dto;
 
+import bc.bookchat.common.type.BoardCategory;
 import bc.bookchat.member.entity.Member;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -21,12 +22,14 @@ public class BoardDetailResponse {
 
     private String writer;
 
+    private BoardCategory boardCategory;
+
     private LocalDateTime createdAt;
 
     private boolean isMine;
 
     @Builder
-    public BoardDetailResponse(UUID id, String title,Long isbn, String content, Member writer, LocalDateTime createdAt, boolean isMine){
+    public BoardDetailResponse(UUID id, String title,Long isbn, String content, Member writer, LocalDateTime createdAt, boolean isMine,BoardCategory boardCategory){
         this.id=id;
         this.isbn=isbn;
         this.title=title;
@@ -34,5 +37,6 @@ public class BoardDetailResponse {
         this.content=content;
         this.createdAt=createdAt;
         this.isMine=isMine;
+        this.boardCategory=boardCategory;
     }
 }
