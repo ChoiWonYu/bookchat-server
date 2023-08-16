@@ -67,6 +67,13 @@ public class BoardService {
          return board;
     }
 
+    public Board deleteBoard(UUID boardId, Member member) {
+        Board board=getBoardDetail(boardId);
+        validateMember(member,board);
+        boardRepository.delete(board);
+        return board;
+    }
+
     private void validateMember(Member member,Board board){
         if(!isMyBoard(member,board)){
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER);

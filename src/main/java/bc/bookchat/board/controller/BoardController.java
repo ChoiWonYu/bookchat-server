@@ -50,4 +50,10 @@ public class BoardController {
        return ResponseHandler.generateResponse("게시물이 수정되었습니다.",HttpStatus.CREATED,board.toDetailDto(member));
     }
 
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<Object> deleteBoard(@PathVariable UUID boardId,@TokenInfo Member member){
+        Board board=boardService.deleteBoard(boardId,member);
+        return ResponseHandler.generateResponse("게시물이 삭제되었습니다.",HttpStatus.OK,board.toDetailDto(member));
+    }
+
 }
