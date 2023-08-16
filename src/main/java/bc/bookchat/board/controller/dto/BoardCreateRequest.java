@@ -18,7 +18,7 @@ public class BoardCreateRequest {
 
     private String imageUrl;
 
-    @ValidEnum(enumClass = BoardCategory.class,message = "카테고리는 필수 입력값입니다.")
+    @ValidEnum
     private BoardCategory boardCategory;
 
     public Board toEntity(Member member, MajorBook book){
