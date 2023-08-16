@@ -3,6 +3,7 @@ package bc.bookchat.book.service;
 import bc.bookchat.book.controller.dto.BookInfo;
 import bc.bookchat.book.controller.dto.GetBookQuery;
 import bc.bookchat.book.controller.dto.KakaoResponse;
+import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.book.repository.BookRepository;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
@@ -41,6 +42,15 @@ public class BookService {
     public PageResponse<BookInfo> getBooksPageResponse(GetBookQuery query) {
         KakaoResponse response= requestToApi(query);
         return convertToCommonPageResponse(query,response);
+    }
+    @Transactional
+    public MajorBook findMajorBookByIsbn(Long isbn){
+
+       if(bookRepository.findById(isbn).isEmpty()){
+           return createBook(isbn).toEntity();
+       }
+
+       return bookRepository.findById(isbn).get();
     }
 
     @Transactional
