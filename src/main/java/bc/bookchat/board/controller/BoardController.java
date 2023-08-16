@@ -16,19 +16,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("/books/{isbn}/boards")
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
 
-    @GetMapping("/{isbn}")
+    @GetMapping
     public ResponseEntity<Object> getBookBoards(@PathVariable Long isbn, BoardPaginationQuery query) {
         PageResponse<CommonBoardResponse> response = boardService.getBookBoards(isbn, query);
         return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK, response);
     }
 
-    @PostMapping("/{isbn}")
+    @PostMapping
     public ResponseEntity<Object> createBookBoard(@Valid @RequestBody BoardCreateRequest boardCreateRequest, @PathVariable Long isbn
     , @TokenInfo Member member) {
         Board board=boardService.createBookBoard(isbn,boardCreateRequest,member);
