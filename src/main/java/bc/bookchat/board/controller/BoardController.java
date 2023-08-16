@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/books/{isbn}/boards")
 @RequiredArgsConstructor
@@ -33,5 +35,11 @@ public class BoardController {
     , @TokenInfo Member member) {
         Board board=boardService.createBookBoard(isbn,boardCreateRequest,member);
         return ResponseHandler.generateResponse("게시물이 생성되었습니다.",HttpStatus.CREATED,board.toDto());
+    }
+
+    @GetMapping("/{boardId}")
+    public ResponseEntity<Object> getBoardDetail(@PathVariable UUID boardId,@TokenInfo Member member){
+        Board board=boardService.getBoardDetail(boardId);
+        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,board.toDetailDto(member));
     }
 }

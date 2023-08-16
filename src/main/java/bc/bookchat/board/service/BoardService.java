@@ -8,6 +8,8 @@ import bc.bookchat.board.repository.BoardRepository;
 import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.book.repository.BookRepository;
 import bc.bookchat.book.service.BookService;
+import bc.bookchat.common.exception.CustomException;
+import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.common.response.PageResponse;
 import bc.bookchat.member.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +43,9 @@ public class BoardService {
         return boardRepository.save(boardCreateRequest.toEntity(member,book));
     }
 
+    public Board getBoardDetail(UUID boardId) {
+        return boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
+    }
 
 
     private Page<Board> getPaginationBoards(Long isbn, BoardPaginationQuery query) {
