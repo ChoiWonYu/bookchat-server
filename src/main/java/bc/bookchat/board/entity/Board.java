@@ -1,5 +1,6 @@
 package bc.bookchat.board.entity;
 
+import bc.bookchat.board.controller.dto.BoardDetailResponse;
 import bc.bookchat.board.controller.dto.CommonBoardResponse;
 import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.common.entity.BaseEntity;
@@ -31,6 +32,7 @@ public class Board extends BaseEntity {
 
     private int views;
 
+    @Enumerated(EnumType.STRING)
     private BoardCategory boardCategory;
 
     private Long isbn;
@@ -51,6 +53,18 @@ public class Board extends BaseEntity {
                 .content(content)
                 .createdAt(super.getCreatedAt())
                 .imageUrl(imageUrl)
+                .build();
+    }
+
+    public BoardDetailResponse toDetailDto(Member member){
+        return BoardDetailResponse.builder()
+                .id(id)
+                .writer(writer)
+                .title(title)
+                .isbn(isbn)
+                .content(content)
+                .createdAt(super.getCreatedAt())
+                .isMine(member.getId().equals(writer.getId()))
                 .build();
     }
 
