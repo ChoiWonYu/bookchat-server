@@ -23,6 +23,7 @@ import org.springframework.http.HttpHeaders;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,13 +45,8 @@ public class BookService {
         return convertToCommonPageResponse(query,response);
     }
     @Transactional
-    public MajorBook findMajorBookByIsbn(Long isbn){
-
-       if(bookRepository.findById(isbn).isEmpty()){
-           return createBook(isbn).toEntity();
-       }
-
-       return bookRepository.findById(isbn).get();
+    public Optional<MajorBook> findMajorBookByIsbn(Long isbn){
+       return bookRepository.findById(isbn);
     }
 
     @Transactional

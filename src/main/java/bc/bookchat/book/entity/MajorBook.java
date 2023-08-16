@@ -1,12 +1,10 @@
 package bc.bookchat.book.entity;
 
 import bc.bookchat.board.entity.Board;
-import bc.bookchat.common.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
