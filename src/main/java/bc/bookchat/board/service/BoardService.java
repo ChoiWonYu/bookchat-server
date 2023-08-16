@@ -1,9 +1,6 @@
 package bc.bookchat.board.service;
 
-import bc.bookchat.board.controller.dto.BoardCreateRequest;
-import bc.bookchat.board.controller.dto.BoardPaginationQuery;
-import bc.bookchat.board.controller.dto.BoardUpdateRequest;
-import bc.bookchat.board.controller.dto.CommonBoardResponse;
+import bc.bookchat.board.controller.dto.*;
 import bc.bookchat.board.entity.Board;
 import bc.bookchat.board.repository.BoardRepository;
 import bc.bookchat.book.entity.MajorBook;
@@ -11,6 +8,7 @@ import bc.bookchat.book.service.BookService;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.common.response.PageResponse;
+import bc.bookchat.common.type.BoardCategory;
 import bc.bookchat.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +32,7 @@ public class BoardService {
     @Transactional
     public PageResponse<CommonBoardResponse> getBookBoards(Long isbn, BoardPaginationQuery query) {
 
-        Optional<MajorBook> book=bookService.findMajorBookByIsbn(isbn);
-        if(book.isEmpty()){
-            bookService.createBook(isbn);
-        }
+        findBookOrCreate(isbn);
 
         Page<Board> boardsPage = getPaginationBoards(isbn, query);
         List<CommonBoardResponse> results = boardsPage.stream().map(Board::toDto).toList();
@@ -67,11 +62,31 @@ public class BoardService {
          return board;
     }
 
+    @Transactional
     public Board deleteBoard(UUID boardId, Member member) {
         Board board=getBoardDetail(boardId);
         validateMember(member,board);
         boardRepository.delete(board);
         return board;
+    }
+
+    @Transactional
+    public PageResponse<CommonBoardResponse> getBookBoardsByCategory(Long isbn, BoardCategory category, BoardPaginationQuery query) {
+
+        findBookOrCreate(isbn);
+
+        Page<Board> boardsPage = getPaginationCategoryBoards(isbn, query,category);
+        List<CommonBoardResponse> results = boardsPage.stream().map(Board::toDto).toList();
+        return new PageResponse<>(results, query.toPageInfo(boardsPage));
+
+    }
+
+    @Transactional
+    public void findBookOrCreate(Long isbn){
+        Optional<MajorBook> book=bookService.findMajorBookByIsbn(isbn);
+        if(book.isEmpty()){
+            bookService.createBook(isbn);
+        }
     }
 
     private void validateMember(Member member,Board board){
@@ -84,7 +99,19 @@ public class BoardService {
         return member.getId().equals(board.getWriter().getId());
     }
 
-    private Page<Board> getPaginationBoards(Long isbn, BoardPaginationQuery query) {
+    @Transactional(readOnly = true)
+    public Page<Board> getPaginationCategoryBoards(Long isbn, BoardPaginationQuery query,BoardCategory category) {
+        PageRequest pageRequest = makePageRequest(query);
+
+        if (query.hasKeyword()) {
+            return boardRepository.findByIsbnAndBoardCategoryAndTitleContaining(isbn,
+                    category,query.getKeyword(), pageRequest);
+        }
+        return this.boardRepository.findByIsbnAndBoardCategory(isbn,category, pageRequest);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Board> getPaginationBoards(Long isbn, BoardPaginationQuery query) {
         PageRequest pageRequest = makePageRequest(query);
 
         if (query.hasKeyword()) {
@@ -98,6 +125,7 @@ public class BoardService {
         return PageRequest.of(boardPaginationDto.getPage() - 1,
                 boardPaginationDto.getSize());
     }
+
 
 
 }
