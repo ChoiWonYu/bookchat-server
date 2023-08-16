@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
@@ -42,6 +43,7 @@ public class BookService {
         return convertToCommonPageResponse(query,response);
     }
 
+    @Transactional
     public BookInfo createBook(Long isbn) {
         BookInfo bookInfo=getBookByIsbn(isbn);
         bookRepository.save(bookInfo.toEntity());
