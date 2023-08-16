@@ -1,10 +1,15 @@
 package bc.bookchat.board.controller;
 
+import bc.bookchat.board.controller.dto.BoardCreateRequest;
 import bc.bookchat.board.controller.dto.BoardPaginationQuery;
 import bc.bookchat.board.controller.dto.CommonBoardResponse;
+import bc.bookchat.board.entity.Board;
 import bc.bookchat.board.service.BoardService;
+import bc.bookchat.common.annotation.TokenInfo;
 import bc.bookchat.common.response.PageResponse;
 import bc.bookchat.common.response.ResponseHandler;
+import bc.bookchat.member.entity.Member;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +23,15 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/{isbn}")
-    public ResponseEntity<Object> getBookBoards(@PathVariable Long isbn, BoardPaginationQuery query){
-        PageResponse<CommonBoardResponse>response=boardService.getBookBoards(isbn,query);
-        return ResponseHandler.generateResponseWithoutMsg( HttpStatus.OK,response);
+    public ResponseEntity<Object> getBookBoards(@PathVariable Long isbn, BoardPaginationQuery query) {
+        PageResponse<CommonBoardResponse> response = boardService.getBookBoards(isbn, query);
+        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK, response);
+    }
+
+    @PostMapping("/{isbn}")
+    public ResponseEntity<Object> createBookBoard(@Valid @RequestBody BoardCreateRequest boardCreateRequest, @PathVariable Long isbn
+    , @TokenInfo Member member) {
+        Board board=boardService.createBookBoard(isbn,boardCreateRequest,member);
+        return ResponseHandler.generateResponse("게시물이 생성되었습니다.",HttpStatus.CREATED,board.toDto());
     }
 }
