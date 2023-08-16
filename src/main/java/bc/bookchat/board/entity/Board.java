@@ -1,6 +1,7 @@
 package bc.bookchat.board.entity;
 
 import bc.bookchat.board.controller.dto.BoardDetailResponse;
+import bc.bookchat.board.controller.dto.BoardUpdateRequest;
 import bc.bookchat.board.controller.dto.CommonBoardResponse;
 import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.common.entity.BaseEntity;
@@ -41,9 +42,20 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member writer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id")
     private MajorBook book;
+
+    public void updateBoard(BoardUpdateRequest boardUpdateRequest) {
+        this.title = boardUpdateRequest.getTitle();
+        this.content = boardUpdateRequest.getContent();
+
+        if (boardUpdateRequest.getImageUrl() != null) {
+            this.imageUrl = boardUpdateRequest.getImageUrl();
+        } else {
+            this.imageUrl = null;
+        }
+    }
 
     public CommonBoardResponse toDto() {
         return CommonBoardResponse.builder()
