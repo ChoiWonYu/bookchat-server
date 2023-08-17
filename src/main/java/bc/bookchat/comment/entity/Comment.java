@@ -34,6 +34,10 @@ public class Comment {
         this.board=board;
     }
 
+    public void editComment(String content){
+        this.content=content;
+    }
+
     public CommentCommonResponseDto toDto() {
         return new CommentCommonResponseDto(board.getId(),content,commentWriter.getUserName());
     }

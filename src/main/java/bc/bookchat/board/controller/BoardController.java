@@ -5,6 +5,7 @@ import bc.bookchat.board.dto.CommentCreateRequest;
 import bc.bookchat.board.entity.Board;
 import bc.bookchat.board.service.BoardService;
 import bc.bookchat.comment.dto.CommentCommonResponseDto;
+import bc.bookchat.comment.dto.CommentUpdateRequest;
 import bc.bookchat.comment.entity.Comment;
 import bc.bookchat.comment.service.CommentService;
 import bc.bookchat.common.annotation.TokenInfo;
@@ -13,6 +14,7 @@ import bc.bookchat.common.response.ResponseHandler;
 import bc.bookchat.member.entity.Member;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +70,12 @@ public class BoardController {
     @PostMapping("/details/{boardId}/comments")
     public ResponseEntity<Object> createComment(@PathVariable UUID boardId, @TokenInfo Member member, @RequestBody CommentCreateRequest commentCreateRequest) {
         Comment comment = commentService.createComment(boardId, member, commentCreateRequest.getContent());
-        CommentCommonResponseDto response = comment.toDto();
-        return ResponseHandler.generateResponse("댓글이 생성되었습니다.", HttpStatus.CREATED, response);
+        return ResponseHandler.generateResponse("댓글이 생성되었습니다.", HttpStatus.CREATED, comment.toDto());
+    }
+
+    @PutMapping("/details/{boardId}/comments/{commentId}")
+    public ResponseEntity<Object> editComment(@PathVariable Long commentId, @TokenInfo Member member, @RequestBody CommentUpdateRequest request){
+        Comment comment=commentService.editComment(commentId,member, request.getContent());
+        return ResponseHandler.generateResponse("댓글이 수정되었습니다.",HttpStatus.CREATED,comment.toDto());
     }
 }
