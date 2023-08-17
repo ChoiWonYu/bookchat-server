@@ -4,7 +4,6 @@ import bc.bookchat.board.controller.dto.*;
 import bc.bookchat.board.dto.CommentCreateRequest;
 import bc.bookchat.board.entity.Board;
 import bc.bookchat.board.service.BoardService;
-import bc.bookchat.comment.dto.CommentCommonResponseDto;
 import bc.bookchat.comment.dto.CommentUpdateRequest;
 import bc.bookchat.comment.entity.Comment;
 import bc.bookchat.comment.service.CommentService;
@@ -14,7 +13,6 @@ import bc.bookchat.common.response.ResponseHandler;
 import bc.bookchat.member.entity.Member;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,4 +76,11 @@ public class BoardController {
         Comment comment=commentService.editComment(commentId,member, request.getContent());
         return ResponseHandler.generateResponse("댓글이 수정되었습니다.",HttpStatus.CREATED,comment.toDto());
     }
+
+    @DeleteMapping("/details/{boardId}/comments/{commentId}")
+    public ResponseEntity<Object> deleteComment(@PathVariable Long commentId, @TokenInfo Member member){
+        Comment comment=commentService.deleteComment(commentId,member);
+        return ResponseHandler.generateResponse("댓글이 삭제되었습니다.",HttpStatus.CREATED,comment.toDto());
+    }
+
 }
