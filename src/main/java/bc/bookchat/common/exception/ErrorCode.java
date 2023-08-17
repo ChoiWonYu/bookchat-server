@@ -10,6 +10,7 @@ public enum ErrorCode {
   /* 400 BAD_REQUEST : 잘못된 요청 */
   INVALID_INPUT_VALUE(400, "BAD_REQUEST", "입력값이 올바르지 않습니다."),
   BAD_REQUEST(400, "BAD_REQUEST","잘못된 요청입니다."),
+  INVALID_ISBN(400,"BAD_REQUEST","유효하지 않은 ISBN입니다."),
 
   /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
   UNAUTHENTICATED_USERS(401, "UNAUTHORIZED","인증이 필요합니다."),
@@ -24,6 +25,8 @@ public enum ErrorCode {
   MEMBER_NOT_FOUND(404, "NOT_FOUND","해당 유저 정보를 찾을 수 없습니다."),
   RESOURCE_NOT_FOUND(404, "NOT_FOUND","해당 정보를 찾을 수 없습니다."),
   BOARD_NOT_FOUND(404,"NOT_FOUND","해당 게시물을 찾을 수 없습니다."),
+  ISBN_NOT_FOUND(404,"NOT_FOUND","해당 ISBN을 가진 책의 정보가 없습니다."),
+  COMMENT_NOT_FOUND(404,"NOT_FOUND","해당 댓글을 찾을 수 없습니다."),
 
   /* 405 METHOD_NOT_ALLOWED : 지원하지 않는 HTTP Method */
   METHOD_NOT_ALLOWED(405, "METHOD_NOT_ALLOWED","허용되지 않은 요청입니다."),

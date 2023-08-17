@@ -10,15 +10,18 @@ import bc.bookchat.member.entity.Member;
 import bc.bookchat.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthService {
 
   private final MemberRepository memberRepository;
 
   private final JwtProvider jwtProvider;
 
+  @Transactional
   public SignupResponse register(SignupRequest signupRequest) {
     Member member=signupRequest.toEntity();
     memberRepository.save(member);
