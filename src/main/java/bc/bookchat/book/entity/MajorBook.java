@@ -1,21 +1,35 @@
 package bc.bookchat.book.entity;
 
+import bc.bookchat.board.entity.Board;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.OneToMany;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class MajorBook {
   @Id
-  Long isbn;
+  private Long isbn;
 
-  String title;
+  private String title;
 
-  String author;
+  private String author;
 
-  String imageUrl;
+  private String imageUrl;
 
+  @OneToMany(mappedBy = "book")
+  private List<Board> boards;
+
+  public MajorBook(Long isbn,String title,String author,String imageUrl){
+    this.isbn=isbn;
+    this.title=title;
+    this.author=author;
+    this.imageUrl=imageUrl;
+  }
 }

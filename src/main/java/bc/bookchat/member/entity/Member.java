@@ -1,14 +1,13 @@
 package bc.bookchat.member.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import bc.bookchat.board.entity.Board;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +25,9 @@ public class Member {
   private String password;
 
   private String userName;
+
+  @OneToMany(mappedBy = "writer")
+  private List<Board> boards;
 
   @Builder
   public Member(String email, String password, String userName) {

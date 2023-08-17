@@ -19,7 +19,7 @@ public class GetBookQuery {
   private int page=1;
   private int size=3;
 
-  @ValidEnum(enumClass = SearchField.class, message = "search field는 필수 입력값입니다.")
+  @ValidEnum
   private SearchField searchField;
 
   public GetBookQuery(String query,SearchField searchField){

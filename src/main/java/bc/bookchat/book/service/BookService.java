@@ -3,6 +3,7 @@ package bc.bookchat.book.service;
 import bc.bookchat.book.controller.dto.BookInfo;
 import bc.bookchat.book.controller.dto.GetBookQuery;
 import bc.bookchat.book.controller.dto.KakaoResponse;
+import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.book.repository.BookRepository;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
@@ -16,11 +17,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +44,12 @@ public class BookService {
         KakaoResponse response= requestToApi(query);
         return convertToCommonPageResponse(query,response);
     }
+    @Transactional
+    public Optional<MajorBook> findMajorBookByIsbn(Long isbn){
+       return bookRepository.findById(isbn);
+    }
 
+    @Transactional
     public BookInfo createBook(Long isbn) {
         BookInfo bookInfo=getBookByIsbn(isbn);
         bookRepository.save(bookInfo.toEntity());
