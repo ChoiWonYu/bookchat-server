@@ -3,6 +3,7 @@ package bc.bookchat.comment.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -15,4 +16,8 @@ public class CommentCommonResponseDto {
     private String content;
 
     private String commentWriter;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

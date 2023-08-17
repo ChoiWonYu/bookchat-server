@@ -40,11 +40,11 @@ public class Comment extends BaseEntity {
     }
 
     public CommentCommonResponseDto toDto() {
-        return new CommentCommonResponseDto(id,board.getId(),content,commentWriter.getUserName());
+        return new CommentCommonResponseDto(id,board.getId(),content,commentWriter.getUserName(),super.getCreatedAt(),super.getUpdatedAt());
     }
 
     public CommentOwnerShipResponseDto toOwnerShipDto(Member member) {
-        return new CommentOwnerShipResponseDto(id,board.getId(),content,commentWriter.getUserName(),commentWriter.equals(member));
+        return new CommentOwnerShipResponseDto(id,board.getId(),content,commentWriter.getUserName(),commentWriter.equals(member),super.getCreatedAt(),super.getUpdatedAt());
     }
 
     public void addToBoard(Board board){
