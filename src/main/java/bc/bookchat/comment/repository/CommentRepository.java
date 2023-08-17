@@ -1,4 +1,4 @@
-package bc.bookchat.comment;
+package bc.bookchat.comment.repository;
 
 import bc.bookchat.comment.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

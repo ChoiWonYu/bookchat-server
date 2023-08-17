@@ -2,7 +2,7 @@ package bc.bookchat.comment.service;
 
 import bc.bookchat.board.entity.Board;
 import bc.bookchat.board.service.BoardService;
-import bc.bookchat.comment.CommentRepository;
+import bc.bookchat.comment.repository.CommentRepository;
 import bc.bookchat.comment.entity.Comment;
 import bc.bookchat.member.entity.Member;
 import lombok.RequiredArgsConstructor;
