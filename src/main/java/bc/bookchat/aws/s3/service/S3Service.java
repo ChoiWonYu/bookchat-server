@@ -1,4 +1,4 @@
-package bc.bookchat.aws.s3;
+package bc.bookchat.aws.s3.service;
 
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
