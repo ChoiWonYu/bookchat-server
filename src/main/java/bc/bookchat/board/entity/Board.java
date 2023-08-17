@@ -4,6 +4,8 @@ import bc.bookchat.board.controller.dto.BoardDetailResponse;
 import bc.bookchat.board.controller.dto.BoardUpdateRequest;
 import bc.bookchat.board.controller.dto.CommonBoardResponse;
 import bc.bookchat.book.entity.MajorBook;
+import bc.bookchat.comment.dto.CommentOwnerShipResponseDto;
+import bc.bookchat.comment.entity.Comment;
 import bc.bookchat.common.entity.BaseEntity;
 import bc.bookchat.common.type.BoardCategory;
 import bc.bookchat.member.entity.Member;
@@ -14,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -46,6 +50,9 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "book_id")
     private MajorBook book;
 
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     public void updateBoard(BoardUpdateRequest boardUpdateRequest) {
         this.title = boardUpdateRequest.getTitle();
         this.content = boardUpdateRequest.getContent();
@@ -70,6 +77,11 @@ public class Board extends BaseEntity {
     }
 
     public BoardDetailResponse toDetailDto(Member member){
+
+        List<CommentOwnerShipResponseDto> commentsList = comments.stream()
+                .map(comment -> comment.toOwnerShipDto(member)).toList();
+
+
         return BoardDetailResponse.builder()
                 .id(id)
                 .writer(writer)
@@ -78,6 +90,7 @@ public class Board extends BaseEntity {
                 .content(content)
                 .createdAt(super.getCreatedAt())
                 .isMine(member.getId().equals(writer.getId()))
+                .comments(commentsList)
                 .boardCategory(boardCategory)
                 .build();
     }
