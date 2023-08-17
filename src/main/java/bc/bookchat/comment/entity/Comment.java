@@ -3,6 +3,7 @@ package bc.bookchat.comment.entity;
 import bc.bookchat.board.entity.Board;
 import bc.bookchat.comment.dto.CommentCommonResponseDto;
 import bc.bookchat.comment.dto.CommentOwnerShipResponseDto;
+import bc.bookchat.common.entity.BaseEntity;
 import bc.bookchat.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,11 +40,11 @@ public class Comment {
     }
 
     public CommentCommonResponseDto toDto() {
-        return new CommentCommonResponseDto(board.getId(),content,commentWriter.getUserName());
+        return new CommentCommonResponseDto(id,board.getId(),content,commentWriter.getUserName());
     }
 
     public CommentOwnerShipResponseDto toOwnerShipDto(Member member) {
-        return new CommentOwnerShipResponseDto(board.getId(),content,commentWriter.getUserName(),commentWriter.equals(member));
+        return new CommentOwnerShipResponseDto(id,board.getId(),content,commentWriter.getUserName(),commentWriter.equals(member));
     }
 
     public void addToBoard(Board board){

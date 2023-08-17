@@ -8,6 +8,8 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 public class CommentOwnerShipResponseDto {
+    private Long commentId;
+
     private UUID boardId;
 
     private String content;
