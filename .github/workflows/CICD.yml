@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: docker stop container
         run: |
-          sudo docker compose stop || true
+          sudo docker compose stop
 
       - name: pull image from docker hub
         run: |
