@@ -43,22 +43,19 @@ jobs:
     needs: CI
     name: CD
     runs-on: self-hosted
-
+    defaults:
+        run:
+          working-directory: ~/
     steps:
       - name: docker stop container
-        working-directory: ~/
         run: |
-          ls -alF
-          pwd
           sudo docker compose stop || true
 
       - name: pull image from docker hub
-        working-directory: ~/
         run: |
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{secrets.IMAGE_NAME}}
 
       - name: compose up spring application
-        working-directory: ~/
         run: |
           sudo docker compose --env-file ~/.env -f ~/docker-compose.yml up -d --build
           sudo docker system prune -f
