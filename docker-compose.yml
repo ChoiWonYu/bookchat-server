@@ -10,15 +10,14 @@ services:
       - ./db/data:/var/lib/mysql
     environment:
       MYSQL_DATABASE : bookchat
-      MYSQL_ROOT_HOST : ${DB_ROOT_USERNAME}
       MYSQL_ROOT_PASSWORD : ${DB_PASSWORD}
     networks:
-      - my_network
+      - bookchat_network
   spring:
     depends_on:
       - db
     restart: always
-    container_name: docker-compose-test
+    container_name: bookchat-application
     build:
       context: ./
       dockerfile: Dockerfile
@@ -36,8 +35,8 @@ services:
       KAKAO_BASE_URL: ${KAKAO_BASE_URL}
 
     networks:
-      - my_network
+      - bookchat_network
 networks:
-  my_network:
+  bookchat_network:
 
 
