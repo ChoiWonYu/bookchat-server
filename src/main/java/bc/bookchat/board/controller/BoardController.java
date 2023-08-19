@@ -1,7 +1,7 @@
 package bc.bookchat.board.controller;
 
 import bc.bookchat.board.controller.dto.*;
-import bc.bookchat.board.dto.CommentCreateRequest;
+import bc.bookchat.board.controller.dto.CommentCreateRequest;
 import bc.bookchat.board.entity.Board;
 import bc.bookchat.board.service.BoardService;
 import bc.bookchat.comment.dto.CommentUpdateRequest;

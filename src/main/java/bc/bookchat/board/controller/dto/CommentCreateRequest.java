@@ -1,4 +1,4 @@
-package bc.bookchat.board.dto;
+package bc.bookchat.board.controller.dto;
 
 import lombok.Data;
 
