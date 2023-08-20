@@ -56,6 +56,7 @@ public class Board extends BaseEntity {
     public void updateBoard(BoardUpdateRequest boardUpdateRequest) {
         this.title = boardUpdateRequest.getTitle();
         this.content = boardUpdateRequest.getContent();
+        this.boardCategory=boardUpdateRequest.getBoardCategory();
 
         if (boardUpdateRequest.getImageUrl() != null) {
             this.imageUrl = boardUpdateRequest.getImageUrl();
