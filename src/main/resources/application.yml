@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:h2:tcp://localhost/~/bookchat
+    username: bookchat
+    password: pw
     driver-class-name: org.h2.Driver
 
   jpa:
