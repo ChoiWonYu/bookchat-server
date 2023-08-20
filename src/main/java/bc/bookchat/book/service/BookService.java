@@ -76,8 +76,11 @@ public class BookService {
 
         String url = query.toUrl(baseUrl);
 
-
-        return restTemplate.exchange(url, HttpMethod.GET, request, KakaoResponse.class).getBody();
+        try{
+            return restTemplate.exchange(url, HttpMethod.GET, request, KakaoResponse.class).getBody();
+        }catch(Exception e){
+            throw new CustomException(ErrorCode.BAD_REQUEST);
+        }
     }
 
     private PageResponse<BookInfo> convertToCommonPageResponse(GetBookQuery query,KakaoResponse kakaoResponse){
