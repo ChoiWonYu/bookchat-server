@@ -2,6 +2,7 @@ package bc.bookchat.book.controller.dto;
 
 import bc.bookchat.common.annotation.ValidEnum;
 import bc.bookchat.common.type.SearchField;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,10 @@ public class GetBookQuery {
   @NotBlank(message="query는 필수 입력값입니다.")
   private String query;
 
+  @Min(1)
   private int page=1;
+
+  @Min(1)
   private int size=3;
 
   @ValidEnum
