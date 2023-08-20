@@ -1,10 +1,10 @@
-package bc.bookchat.comment.dto;
+package bc.bookchat.comment.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class CommentUpdateRequest {
+public class CommentCreateRequest {
     @NotBlank(message = "내용은 필수 입력값입니다.")
-    String content;
+    private String content;
 }
