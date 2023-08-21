@@ -10,7 +10,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum SearchField {
     TITLE("TITLE"),
-    AUTHOR("AUTHOR"),
+    PERSON("PERSON"),
     ISBN("ISBN");
 
     private final String value;
