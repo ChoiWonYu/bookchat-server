@@ -26,8 +26,12 @@ public class CommonBoardResponse {
 
     private BoardCategory boardCategory;
 
+    private int views;
+
+    private int commentCounts;
+
     @Builder
-    public CommonBoardResponse(UUID id, String title, String content, Member writer, LocalDateTime createdAt, String imageUrl,BoardCategory boardCategory){
+    public CommonBoardResponse(UUID id, String title, String content, Member writer, LocalDateTime createdAt, String imageUrl,BoardCategory boardCategory,int commentCounts,int views){
         this.id=id;
         this.title=title;
         this.writer=writer.getUserName();
@@ -35,5 +39,7 @@ public class CommonBoardResponse {
         this.imageUrl=imageUrl;
         this.createdAt=createdAt;
         this.boardCategory=boardCategory;
+        this.commentCounts=commentCounts;
+        this.views=views;
     }
 }

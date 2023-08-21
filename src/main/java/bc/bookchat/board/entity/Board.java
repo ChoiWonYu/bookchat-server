@@ -35,7 +35,7 @@ public class Board extends BaseEntity {
 
     private String imageUrl;
 
-    private int views;
+    private int views=0;
 
     @Enumerated(EnumType.STRING)
     private BoardCategory boardCategory;
@@ -74,6 +74,8 @@ public class Board extends BaseEntity {
                 .createdAt(super.getCreatedAt())
                 .imageUrl(imageUrl)
                 .boardCategory(boardCategory)
+                .commentCounts(comments.size())
+                .views(views)
                 .build();
     }
 
