@@ -17,6 +17,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.PatternMatchUtils;
+import org.springframework.web.cors.CorsUtils;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +33,7 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
     HttpServletRequest httpServletRequest = (HttpServletRequest) request;
     HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
-    if(checkWhiteList(httpServletRequest.getRequestURI())){
+    if(checkWhiteList(httpServletRequest.getRequestURI())||CorsUtils.isPreFlightRequest(httpServletRequest)){
       chain.doFilter(request,response);
       return;
     }
