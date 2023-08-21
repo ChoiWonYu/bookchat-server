@@ -95,6 +95,7 @@ public class Board extends BaseEntity {
                 .isMine(member.getId().equals(writer.getId()))
                 .comments(commentsList)
                 .boardCategory(boardCategory)
+                .views(views)
                 .build();
     }
 

@@ -30,11 +30,12 @@ public class BoardDetailResponse {
 
     private List<CommentOwnerShipResponseDto> comments;
 
-
     private boolean isMine;
 
+    private int views;
+
     @Builder
-    public BoardDetailResponse(UUID id, String title,Long isbn, String content, Member writer, LocalDateTime createdAt, boolean isMine,BoardCategory boardCategory,List<CommentOwnerShipResponseDto> comments){
+    public BoardDetailResponse(UUID id, String title,Long isbn, String content, Member writer, LocalDateTime createdAt, boolean isMine,BoardCategory boardCategory,List<CommentOwnerShipResponseDto> comments,int views){
         this.id=id;
         this.isbn=isbn;
         this.title=title;
@@ -44,5 +45,6 @@ public class BoardDetailResponse {
         this.isMine=isMine;
         this.boardCategory=boardCategory;
         this.comments=comments;
+        this.views=views;
     }
 }
