@@ -49,9 +49,11 @@ public class BoardService {
         return boardRepository.save(boardCreateRequest.toEntity(member,book.get()));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Board getBoardDetail(UUID boardId) {
-        return boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
+         Board board=boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
+         board.increaseViews();
+         return board;
     }
 
     @Transactional

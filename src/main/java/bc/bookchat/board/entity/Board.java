@@ -109,4 +109,8 @@ public class Board extends BaseEntity {
         this.boardCategory=category;
         this.views=0;
     }
+
+    public void increaseViews(){
+        views++;
+    }
 }
