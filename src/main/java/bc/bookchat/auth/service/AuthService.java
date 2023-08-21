@@ -33,6 +33,10 @@ public class AuthService {
     Member member=memberRepository.findByEmail(loginRequest.getEmail())
         .orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
+    if(!hasSamePassword(member,loginRequest)){
+      throw new CustomException(ErrorCode.WRONG_PASSWORD);
+    }
+
     String accessToken=jwtProvider.createAccessToken(member.getEmail());
 
     return accessToken;
@@ -45,4 +49,7 @@ public class AuthService {
         .orElseThrow(()->new CustomException(ErrorCode.MEMBER_NOT_FOUND));
   }
 
+  private boolean hasSamePassword(Member member, LoginRequest loginRequest) {
+    return member.getPassword().equals(loginRequest.getPassword());
+  }
 }
