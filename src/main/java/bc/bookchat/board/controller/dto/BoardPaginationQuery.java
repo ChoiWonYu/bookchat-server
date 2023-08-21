@@ -12,7 +12,7 @@ public class BoardPaginationQuery {
     private int page=1;
 
     @Min(1)
-    private int size=3;
+    private int size=5;
 
     private String keyword;
 
