@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -70,12 +71,14 @@ public class BookService {
     private KakaoResponse requestToApi(GetBookQuery query) {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "KakaoAK " + kakaoSecretKey);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         HttpEntity request = new HttpEntity(headers);
 
-        String url = query.toUrl(baseUrl);
+        URI url = query.toURI(baseUrl);
 
+        log.info("query: "+query.getQuery());
+        log.info("kakao api request url: "+url);
         try{
             return restTemplate.exchange(url, HttpMethod.GET, request, KakaoResponse.class).getBody();
         }catch(Exception e){
