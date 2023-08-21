@@ -1,12 +1,11 @@
 package bc.bookchat.common.filter;
 
-import bc.bookchat.common.jwt.JwtProvider;
+import bc.bookchat.auth.service.AuthService;
+import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.common.exception.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,7 +24,7 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
 
   private String[] whiteListURI=new String[] {"/auth/*"};
 
-  private final JwtProvider jwtProvider;
+  private final AuthService authService;
 
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -47,9 +46,10 @@ public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
 
     try{
       String token=getToken(httpServletRequest);
-      jwtProvider.parseClaims(token);
+      authService.findMemberByJwt(token);
       chain.doFilter(request,response);
-    }catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+    }catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException |
+            CustomException e) {
       setErrorResponse(httpServletResponse, ErrorCode.INVALID_TOKEN);
     } catch (ExpiredJwtException e) {
       setErrorResponse(httpServletResponse,ErrorCode.EXPIRED_TOKEN);
