@@ -1,5 +1,7 @@
 package bc.bookchat.room.service;
 
+import bc.bookchat.book.entity.MajorBook;
+import bc.bookchat.book.service.BookService;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.member.entity.Member;
@@ -12,6 +14,7 @@ import bc.bookchat.room.dto.VisitedResponseDto;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final VisitedRepository visitedRepository;
+    private final BookService bookService;
+
+    @Transactional
+    public RoomResponseDto createRoom(Long isbn) {
+        // DUPLICATE Room name
+        System.out.println("isbn : " + isbn);
+        if (roomRepository.findByRoomId(isbn).isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+        }
+        // IF BOOK NOT FIND, CREATE BOOK
+        findBookOrCreate(isbn);
+        MajorBook majorBook = bookService.findMajorBookByIsbn(isbn).orElseThrow();
+        Room room = Room.create(majorBook.getTitle(), isbn);
+        roomRepository.save(room);
+        return RoomResponseDto.toDto(isbn, majorBook.getTitle());
+    }
 
     @Transactional(readOnly = true)
     public List<RoomResponseDto> findAll() {
@@ -33,22 +52,13 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public RoomResponseDto findRoom(String roomId) {
+    public RoomResponseDto findRoom(Long roomId) {
         Room room = roomRepository.findByRoomId(roomId).orElseThrow(() -> new CustomException(
             ErrorCode.ROOM_NOT_FOUND));
         return RoomResponseDto.toDto(room.getRoomId(), room.getName());
     }
 
-    public RoomResponseDto createRoom(String name) {
-        // DUPLICATE Room name
-        if (roomRepository.findByName(name).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
-        }
-        Room room = Room.create(name);
-        roomRepository.save(room);
-        return RoomResponseDto.toDto(room.getRoomId(), name);
-    }
-
+    @Transactional(readOnly = true)
     public List<VisitedResponseDto> findVisitedAll(Member member) {
         List<Visited> visitedList = visitedRepository.findAllByMember_Email(member.getEmail());
         List<VisitedResponseDto> responseDtoList = new ArrayList<>();
@@ -59,5 +69,13 @@ public class RoomService {
             responseDtoList.add(responseDto);
         }
         return responseDtoList;
+    }
+
+    @Transactional
+    public void findBookOrCreate(Long isbn){
+        Optional<MajorBook> book=bookService.findMajorBookByIsbn(isbn);
+        if(book.isEmpty()){
+            bookService.createBook(isbn);
+        }
     }
 }

@@ -3,7 +3,6 @@ package bc.bookchat.room.presentation;
 import bc.bookchat.common.annotation.TokenInfo;
 import bc.bookchat.common.response.ResponseHandler;
 import bc.bookchat.member.entity.Member;
-import bc.bookchat.room.dto.RoomResponseDto;
 import bc.bookchat.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +20,10 @@ public class RoomController {
 
     // 방 생성
     @PostMapping("/rooms")
-    public ResponseEntity<Object> createRoom(@RequestParam String name) {
+    public ResponseEntity<Object> createRoom(@RequestParam Long isbn) {
         return ResponseHandler.generateResponse("채팅방이 생성되었습니다.",
             HttpStatus.CREATED,
-            roomService.createRoom(name));
+            roomService.createRoom(isbn));
     }
 
     // 모든 방 리스트 출력
@@ -35,10 +34,10 @@ public class RoomController {
     }
 
     // 채팅방 정보 출력 (1개)
-    @GetMapping("/rooms/{roomId}")
-    public ResponseEntity<Object> roomInfo(@PathVariable String roomId) {
+    @GetMapping("/rooms/{isbn}")
+    public ResponseEntity<Object> roomInfo(@PathVariable Long isbn) {
         return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
-            roomService.findRoom(roomId));
+            roomService.findRoom(isbn));
     }
 
     // 접속한 적 있던 채팅방 목록 조회
