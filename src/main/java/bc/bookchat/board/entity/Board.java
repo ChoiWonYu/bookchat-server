@@ -46,7 +46,7 @@ public class Board extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member writer;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private MajorBook book;
 
@@ -95,6 +95,7 @@ public class Board extends BaseEntity {
                 .isMine(member.getId().equals(writer.getId()))
                 .comments(commentsList)
                 .boardCategory(boardCategory)
+                .views(views)
                 .build();
     }
 
