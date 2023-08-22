@@ -1,12 +1,13 @@
 package bc.bookchat.room.domain.entity;
 
-import bc.bookchat.chat.domain.entity.Session;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
@@ -22,8 +23,18 @@ public class Room {
     private String name;
     private String roomId;
 
+    @Column(name = "create_at")
+    private LocalDate createAt;
+    @PrePersist
+    protected void onCreate() {
+        createAt = LocalDate.now();
+    }
+
     @OneToMany(mappedBy = "room")
-    private List<Session> userList;
+    private List<Session> sessionList;
+
+    @OneToMany(mappedBy = "room")
+    private List<Visited> visitedList;
 
     private Room(String name, String roomId) {
         this.name = name;

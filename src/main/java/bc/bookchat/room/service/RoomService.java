@@ -2,9 +2,14 @@ package bc.bookchat.room.service;
 
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
+import bc.bookchat.member.entity.Member;
 import bc.bookchat.room.domain.entity.Room;
+import bc.bookchat.room.domain.entity.Visited;
 import bc.bookchat.room.domain.repository.RoomRepository;
+import bc.bookchat.room.domain.repository.VisitedRepository;
 import bc.bookchat.room.dto.RoomResponseDto;
+import bc.bookchat.room.dto.VisitedResponseDto;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class RoomService {
     private final RoomRepository roomRepository;
+    private final VisitedRepository visitedRepository;
 
     @Transactional(readOnly = true)
     public List<RoomResponseDto> findAll() {
@@ -41,5 +47,17 @@ public class RoomService {
         Room room = Room.create(name);
         roomRepository.save(room);
         return RoomResponseDto.toDto(room.getRoomId(), name);
+    }
+
+    public List<VisitedResponseDto> findVisitedAll(Member member) {
+        List<Visited> visitedList = visitedRepository.findAllByMember_Email(member.getEmail());
+        List<VisitedResponseDto> responseDtoList = new ArrayList<>();
+        for (Visited visited : visitedList) {
+            String roomName = visited.getRoom().getName();
+            String enterAt = visited.getEnterAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            VisitedResponseDto responseDto = VisitedResponseDto.create(roomName, enterAt);
+            responseDtoList.add(responseDto);
+        }
+        return responseDtoList;
     }
 }

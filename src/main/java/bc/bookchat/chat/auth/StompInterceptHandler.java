@@ -4,11 +4,17 @@ import bc.bookchat.auth.service.AuthService;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.common.jwt.JwtProvider;
+import bc.bookchat.member.entity.Member;
+import bc.bookchat.room.domain.entity.Room;
+import bc.bookchat.room.domain.entity.Session;
+import bc.bookchat.room.domain.repository.RoomRepository;
+import bc.bookchat.room.domain.repository.SessionRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -29,9 +35,11 @@ public class StompInterceptHandler implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
+
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            // CHECK has Authorization, is BearerToken
             String jwt = accessor.getFirstNativeHeader("Authorization");
+
+            // CHECK has Authorization, is BearerToken
             if (!hasAuthorization(jwt) || !isBearerToken(jwt)) {
                 throw new CustomException(ErrorCode.UNAUTHENTICATED_USERS);
             }
@@ -45,8 +53,8 @@ public class StompInterceptHandler implements ChannelInterceptor {
             } catch (ExpiredJwtException e) {
                 throw new CustomException(ErrorCode.EXPIRED_TOKEN);
             }
-        } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
 
+        } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
         }
 
         return message;

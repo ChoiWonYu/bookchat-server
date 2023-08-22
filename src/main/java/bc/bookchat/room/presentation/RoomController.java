@@ -1,6 +1,8 @@
 package bc.bookchat.room.presentation;
 
+import bc.bookchat.common.annotation.TokenInfo;
 import bc.bookchat.common.response.ResponseHandler;
+import bc.bookchat.member.entity.Member;
 import bc.bookchat.room.dto.RoomResponseDto;
 import bc.bookchat.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -39,4 +41,10 @@ public class RoomController {
             roomService.findRoom(roomId));
     }
 
+    // 접속한 적 있던 채팅방 목록 조회
+    @GetMapping("/rooms/visited")
+    public ResponseEntity<Object> findVisitedAll(@TokenInfo Member member) {
+        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
+            roomService.findVisitedAll(member));
+    }
 }

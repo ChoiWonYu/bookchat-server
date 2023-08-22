@@ -1,6 +1,7 @@
 package bc.bookchat.room.domain.repository;
 
 import bc.bookchat.room.domain.entity.Room;
+import bc.bookchat.room.domain.entity.Visited;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

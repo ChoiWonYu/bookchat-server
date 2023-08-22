@@ -1,6 +1,6 @@
-package bc.bookchat.chat.domain.infra;
+package bc.bookchat.room.domain.repository;
 
-import bc.bookchat.chat.domain.entity.Session;
+import bc.bookchat.room.domain.entity.Session;
 import bc.bookchat.room.domain.entity.Room;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
