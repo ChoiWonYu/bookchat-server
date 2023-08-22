@@ -1,5 +1,6 @@
 package bc.bookchat.room.presentation;
 
+import bc.bookchat.common.response.ResponseHandler;
 import bc.bookchat.room.dto.RoomResponseDto;
 import bc.bookchat.room.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -18,21 +19,24 @@ public class RoomController {
 
     // 방 생성
     @PostMapping("/rooms")
-    public ResponseEntity<RoomResponseDto> createRoom(@RequestParam String name) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-            .body(roomService.createRoom(name));
+    public ResponseEntity<Object> createRoom(@RequestParam String name) {
+        return ResponseHandler.generateResponse("채팅방이 생성되었습니다.",
+            HttpStatus.CREATED,
+            roomService.createRoom(name));
     }
 
     // 모든 방 리스트 출력
     @GetMapping("/rooms")
-    public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(roomService.findAll());
+    public ResponseEntity<Object> findAll() {
+        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
+            roomService.findAll());
     }
 
     // 채팅방 정보 출력 (1개)
     @GetMapping("/rooms/{roomId}")
-    public ResponseEntity<RoomResponseDto> roomInfo(@PathVariable String roomId) {
-        return ResponseEntity.ok(roomService.findRoom(roomId));
+    public ResponseEntity<Object> roomInfo(@PathVariable String roomId) {
+        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
+            roomService.findRoom(roomId));
     }
 
 }

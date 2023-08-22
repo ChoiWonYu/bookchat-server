@@ -34,6 +34,7 @@ public class RoomService {
     }
 
     public RoomResponseDto createRoom(String name) {
+        // DUPLICATE Room name
         if (roomRepository.findByName(name).isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
