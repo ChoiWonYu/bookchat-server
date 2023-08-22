@@ -43,7 +43,7 @@ public class BoardController {
 
     @GetMapping("/details/{boardId}")
     public ResponseEntity<Object> getBoardDetail(@PathVariable UUID boardId, @TokenInfo Member member) {
-        Board board = boardService.getBoardDetail(boardId);
+        Board board = boardService.viewBoardDetail(boardId);
         return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK, board.toDetailDto(member));
     }
 

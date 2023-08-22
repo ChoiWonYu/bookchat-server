@@ -49,11 +49,16 @@ public class BoardService {
         return boardRepository.save(boardCreateRequest.toEntity(member,book.get()));
     }
 
+    @Transactional(readOnly = true)
+    public Board viewBoardDetail(UUID boardId) {
+        Board board=getBoardDetail(boardId);
+        board.increaseViews();
+        return board;
+    }
+
     @Transactional
     public Board getBoardDetail(UUID boardId) {
-         Board board=boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
-         board.increaseViews();
-         return board;
+         return boardRepository.findById(boardId).orElseThrow(()->new CustomException(ErrorCode.BOARD_NOT_FOUND));
     }
 
     @Transactional
@@ -127,7 +132,4 @@ public class BoardService {
         return PageRequest.of(boardPaginationDto.getPage() - 1,
                 boardPaginationDto.getSize());
     }
-
-
-
 }
