@@ -5,12 +5,12 @@ import lombok.Getter;
 
 @Getter
 public class MessageResponseDto {
-    private String roomId;
+    private Long roomId;
     private String sender;
     private String message;
     private ArrayList<String> onlineUserList;
 
-    private MessageResponseDto(String roomId, String sender, String message,
+    private MessageResponseDto(Long roomId, String sender, String message,
         ArrayList<String> onlineUserList) {
         this.roomId = roomId;
         this.sender = sender;
@@ -18,7 +18,7 @@ public class MessageResponseDto {
         this.onlineUserList = onlineUserList;
     }
 
-    public static MessageResponseDto toDto(String roomId, String sender, String message, ArrayList<String> onlineUserList) {
+    public static MessageResponseDto toDto(Long roomId, String sender, String message, ArrayList<String> onlineUserList) {
         return new MessageResponseDto(roomId, sender, message, onlineUserList);
     }
 }
