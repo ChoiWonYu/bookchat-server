@@ -23,7 +23,7 @@ import org.springframework.web.cors.CorsUtils;
 @Slf4j
 public class JwtAuthorizationFilter implements BearerTokenAuthorizationFilter{
 
-  private String[] whiteListURI=new String[] {"/auth/*"};
+  private String[] whiteListURI=new String[] {"/auth/*", "/websocket-stomp/*", "/h2-console/*"};
 
   private final AuthService authService;
 

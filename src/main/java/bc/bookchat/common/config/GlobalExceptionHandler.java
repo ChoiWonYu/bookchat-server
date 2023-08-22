@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -42,6 +43,16 @@ public class GlobalExceptionHandler {
     }
 
     ErrorResponse response = new ErrorResponse(ErrorCode.BAD_REQUEST, errors);
+    return ResponseEntity.status(response.getStatus()).body(response);
+  }
+
+  /**
+   * 요청 param가 전해지지 않을 때 발생
+   */
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  protected ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
+      MissingServletRequestParameterException e) {
+    ErrorResponse response = new ErrorResponse(ErrorCode.BAD_REQUEST);
     return ResponseEntity.status(response.getStatus()).body(response);
   }
 
