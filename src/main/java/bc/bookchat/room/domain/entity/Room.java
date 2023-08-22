@@ -9,7 +9,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +20,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String roomId;
+    private Long roomId;
 
     @Column(name = "create_at")
     private LocalDate createAt;
@@ -36,12 +35,12 @@ public class Room {
     @OneToMany(mappedBy = "room")
     private List<Visited> visitedList;
 
-    private Room(String name, String roomId) {
+    private Room(String name, Long roomId) {
         this.name = name;
         this.roomId = roomId;
     }
 
-    public static Room create(String name) {
-        return new Room(name, UUID.randomUUID().toString());
+    public static Room create(String name, Long roomId) {
+        return new Room(name, roomId);
     }
 }

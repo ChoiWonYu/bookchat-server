@@ -1,6 +1,5 @@
 package bc.bookchat.chat.presentation.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -11,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MessageRequestDto {
-    private String roomId;
+    private Long roomId;
     @NotBlank
     @Size(max = 20)
     private String message;
