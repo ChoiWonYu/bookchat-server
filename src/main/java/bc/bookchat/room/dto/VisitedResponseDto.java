@@ -1,5 +1,8 @@
 package bc.bookchat.room.dto;
 
+import lombok.Getter;
+
+@Getter
 public class VisitedResponseDto {
     private String roomName;
     private String enterAt;

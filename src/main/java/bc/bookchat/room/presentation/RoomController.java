@@ -26,24 +26,17 @@ public class RoomController {
             roomService.createRoom(isbn));
     }
 
-    // 모든 방 리스트 출력
-    @GetMapping("/rooms")
-    public ResponseEntity<Object> findAll() {
-        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
-            roomService.findAll());
-    }
-
-    // 채팅방 정보 출력 (1개)
-    @GetMapping("/rooms/{isbn}")
-    public ResponseEntity<Object> roomInfo(@PathVariable Long isbn) {
-        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
-            roomService.findRoom(isbn));
-    }
-
     // 접속한 적 있던 채팅방 목록 조회
     @GetMapping("/rooms/visited")
     public ResponseEntity<Object> findVisitedAll(@TokenInfo Member member) {
         return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
             roomService.findVisitedAll(member));
+    }
+
+    // 채팅방 이전 채팅 목록 조회
+    @GetMapping("/rooms/{isbn}/messages")
+    public ResponseEntity<Object> findRoomMessage(@PathVariable Long isbn) {
+        return ResponseHandler.generateResponseWithoutMsg(HttpStatus.OK,
+            roomService.findBeforeMessageAll(isbn));
     }
 }
