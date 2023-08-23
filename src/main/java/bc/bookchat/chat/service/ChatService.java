@@ -1,6 +1,7 @@
 package bc.bookchat.chat.service;
 
 import bc.bookchat.chat.domain.entity.Message;
+import bc.bookchat.chat.presentation.dto.MessageEnterResponseDto;
 import bc.bookchat.room.domain.entity.Session;
 import bc.bookchat.chat.domain.infra.MessageRepository;
 import bc.bookchat.room.domain.entity.Visited;
@@ -50,17 +51,21 @@ public class ChatService {
         addUser(room, member.getUserName());
         addVisitedUser(room, member);
 
-        // 채팅방 유저 리스트 가져오기
+        // 채팅방 유저 리스트 가져오기, 채팅방에 참여했던 적 있던 유저 리스트 가져오기
         ArrayList<String> userList = findListAll(room);
+        ArrayList<String> visitedUserList = findVisitedListAll(room);
 
-        // 전송
-        MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
+        MessageEnterResponseDto messageEnterResponseDto = MessageEnterResponseDto.toDto(
+            room.getRoomId(),
             member.getUserName(),
             adminId,
             member.getUserName() + "님이 입장하셨습니다.",
-            userList
+            userList,
+            visitedUserList
         );
-        messagingTemplate.convertAndSend("/sub/chat/rooms/" + messageRequestDto.getRoomId(), messageResponseDto);
+
+        messagingTemplate.convertAndSend("/sub/chat/rooms/" + room.getRoomId(),
+            messageEnterResponseDto);
     }
 
     @Transactional
@@ -143,6 +148,16 @@ public class ChatService {
     /**
      * VISITED Table 관련 메서드
      */
+    public ArrayList<String> findVisitedListAll(Room room) {
+        List<Visited> visitedList = visitedRepository.findDistinctMember_IdByRoom_RoomIdOrderByEnterAtDesc(
+            room.getRoomId());
+        ArrayList<String> usernameList = new ArrayList<>();
+        for (Visited visited : visitedList) {
+            String username = visited.getMember().getUserName();
+            usernameList.add(username);
+        }
+        return usernameList;
+    }
     public void addVisitedUser(Room room, Member member) {
         Visited visited = Visited.create(member, room);
         visitedRepository.save(visited);

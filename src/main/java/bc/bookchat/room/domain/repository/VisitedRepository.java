@@ -10,4 +10,6 @@ public interface VisitedRepository extends JpaRepository<Visited, Long> {
     List<Visited> findAllByMember_Email(String email);
 
     List<Visited> findDistinctRoom_IdByMember_UserNameOrderByEnterAtDesc(String username);
+
+    List<Visited> findDistinctMember_IdByRoom_RoomIdOrderByEnterAtDesc(Long roomId);
 }
