@@ -28,16 +28,19 @@ public class RoomService {
 
     @Transactional
     public RoomResponseDto createRoom(Long isbn) {
-        // DUPLICATE Room name
-        System.out.println("isbn : " + isbn);
-        if (roomRepository.findByRoomId(isbn).isPresent()) {
-            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
-        }
         // IF BOOK NOT FIND, CREATE BOOK
         findBookOrCreate(isbn);
         MajorBook majorBook = bookService.findMajorBookByIsbn(isbn).orElseThrow();
-        Room room = Room.create(majorBook.getTitle(), isbn);
-        roomRepository.save(room);
+
+        // NOT DUPLICATE Room name -> room create(db에 저장)
+        // DUPLICATE -> 에러 대신 그냥 출력
+        System.out.println("isbn : " + isbn);
+        if (roomRepository.findByRoomId(isbn).isEmpty()) {
+            //throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+            Room room = Room.create(majorBook.getTitle(), isbn);
+            roomRepository.save(room);
+        }
+
         return RoomResponseDto.toDto(isbn, majorBook.getTitle());
     }
 

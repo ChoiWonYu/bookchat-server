@@ -19,7 +19,7 @@ public class ChatController {
     private final ChatService chatService;
     private final AuthService authService;
     // 채팅방 입장
-    @MessageMapping("chat/enter")
+    @MessageMapping("/chat/enter")
     public void enter(MessageRequestDto message, @Header("Authorization") String token) {
         log.info("user token: " + token);
         Member memberByJwt = authService.findMemberByJwt(token.substring(7));
@@ -35,7 +35,7 @@ public class ChatController {
     }
 
     // 채팅방 퇴장
-    @MessageMapping("chat/quit")
+    @MessageMapping("/chat/quit")
     public void quit(MessageRequestDto message, @Header("Authorization") String token) {
         log.info("user token: " + token);
         Member memberByJwt = authService.findMemberByJwt(token.substring(7));
