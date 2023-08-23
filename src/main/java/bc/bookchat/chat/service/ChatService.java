@@ -30,6 +30,8 @@ public class ChatService {
     private final VisitedRepository visitedRepository;
     private final SimpMessageSendingOperations messagingTemplate;
 
+    private final static String adminId = "1";
+
     @Transactional
     public void enter(MessageRequestDto messageRequestDto, Member member) {
         // IS NULL 존재하는 방인지 확인
@@ -46,7 +48,7 @@ public class ChatService {
         // 전송
         MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
             member.getUserName(),
-            true,
+            adminId,
             member.getUserName() + "님이 입장하셨습니다.",
             userList
         );
@@ -69,7 +71,7 @@ public class ChatService {
         // 전송
         MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
             member.getUserName(),
-            false,
+            messageRequestDto.getSessionId(),
             messageRequestDto.getMessage(),
             userList
         );
@@ -92,7 +94,7 @@ public class ChatService {
         // 전송
         MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
             member.getUserName(),
-            true,
+            adminId,
             member.getUserName() + "님이 퇴장하셨습니다.",
             userList
         );
