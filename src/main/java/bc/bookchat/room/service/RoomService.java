@@ -5,8 +5,6 @@ import bc.bookchat.book.service.BookService;
 import bc.bookchat.chat.domain.entity.Message;
 import bc.bookchat.chat.domain.infra.MessageRepository;
 import bc.bookchat.chat.presentation.dto.MessageBeforeResponseDto;
-import bc.bookchat.common.exception.CustomException;
-import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.member.entity.Member;
 import bc.bookchat.room.domain.entity.Room;
 import bc.bookchat.room.domain.entity.Visited;
@@ -53,9 +51,14 @@ public class RoomService {
         List<Visited> visitedList = visitedRepository.findDistinctRoom_IdByMember_UserNameOrderByEnterAtDesc(member.getUserName());
         List<VisitedResponseDto> responseDtoList = new ArrayList<>();
         for (Visited visited : visitedList) {
+            MajorBook majorBook = bookService.findMajorBookByIsbn(visited.getRoom().getRoomId())
+                .orElseThrow();
+            Long isbn = majorBook.getIsbn();
             String roomName = visited.getRoom().getName();
             String enterAt = visited.getEnterAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            VisitedResponseDto responseDto = VisitedResponseDto.create(roomName, enterAt);
+            String imageUrl = majorBook.getImageUrl();
+            String writer = majorBook.getAuthor();
+            VisitedResponseDto responseDto = VisitedResponseDto.toDto(isbn, roomName, enterAt, imageUrl, writer);
             responseDtoList.add(responseDto);
         }
         return responseDtoList;

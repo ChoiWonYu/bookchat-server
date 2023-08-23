@@ -125,7 +125,7 @@ public class ChatService {
             room.getRoomId(),
             member.getUserName(),
             adminId,
-            member.getUserName() + "님이 입장하셨습니다.",
+            member.getUserName() + "님이 퇴장하셨습니다.",
             userList,
             visitedUserList
         );
