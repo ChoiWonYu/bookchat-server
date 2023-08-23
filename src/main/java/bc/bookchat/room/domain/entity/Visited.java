@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +23,11 @@ public class Visited {
     private Long id;
 
     @Column(name = "enter_at")
-    private LocalDate enterAt;
+    private LocalDateTime enterAt;
 
     @PrePersist
     protected void onCreate() {
-        enterAt = LocalDate.now();
+        enterAt = LocalDateTime.now();
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

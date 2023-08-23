@@ -96,6 +96,7 @@ public class Board extends BaseEntity {
                 .comments(commentsList)
                 .boardCategory(boardCategory)
                 .views(views)
+                .imageUrl(imageUrl)
                 .build();
     }
 

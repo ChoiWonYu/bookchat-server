@@ -1,6 +1,7 @@
 package bc.bookchat.chat.service;
 
 import bc.bookchat.chat.domain.entity.Message;
+import bc.bookchat.chat.presentation.dto.MessageEnterResponseDto;
 import bc.bookchat.room.domain.entity.Session;
 import bc.bookchat.chat.domain.infra.MessageRepository;
 import bc.bookchat.room.domain.entity.Visited;
@@ -16,6 +17,7 @@ import bc.bookchat.room.domain.repository.VisitedRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatService {
     private final MessageRepository messageRepository;
     private final RoomRepository roomRepository;
@@ -34,6 +37,12 @@ public class ChatService {
 
     @Transactional
     public void enter(MessageRequestDto messageRequestDto, Member member) {
+        // LOG chatting 입장
+        log.info("{}님이 {}에 입장했습니다.",
+            member.getUserName(),
+            messageRequestDto.getRoomId()
+            );
+
         // IS NULL 존재하는 방인지 확인
         Room room = roomRepository.findByRoomId(messageRequestDto.getRoomId()).orElseThrow(
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
@@ -42,27 +51,40 @@ public class ChatService {
         addUser(room, member.getUserName());
         addVisitedUser(room, member);
 
-        // 채팅방 유저 리스트 가져오기
+        // 채팅방 유저 리스트 가져오기, 채팅방에 참여했던 적 있던 유저 리스트 가져오기
         ArrayList<String> userList = findListAll(room);
+        ArrayList<String> visitedUserList = findVisitedListAll(room);
 
-        // 전송
-        MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
+        MessageEnterResponseDto messageEnterResponseDto = MessageEnterResponseDto.toDto(
+            room.getRoomId(),
             member.getUserName(),
             adminId,
             member.getUserName() + "님이 입장하셨습니다.",
-            userList
+            userList,
+            visitedUserList
         );
-        messagingTemplate.convertAndSend("/sub/chat/rooms/" + messageRequestDto.getRoomId(), messageResponseDto);
+
+        messagingTemplate.convertAndSend("/sub/chat/rooms/" + room.getRoomId(),
+            messageEnterResponseDto);
     }
 
     @Transactional
     public void publish(MessageRequestDto messageRequestDto, Member member) {
+        // LOG chatting 메세지
+        log.info("[ {} 채팅방 ] {} : {}",
+            messageRequestDto.getRoomId(),
+            member.getUserName(),
+            messageRequestDto.getMessage()
+            );
+
         // 존재하는 방인지 확인
         Room room = roomRepository.findByRoomId(messageRequestDto.getRoomId()).orElseThrow(
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
 
         // DB 저장
-        Message message = Message.create(messageRequestDto.getMessage());
+        Message message = Message.create(messageRequestDto.getMessage(),
+            room.getRoomId(),
+            member.getUserName());
         messageRepository.save(message);
 
         // 채팅방 유저 리스트 가져오기
@@ -81,6 +103,12 @@ public class ChatService {
 
     @Transactional
     public void quit(MessageRequestDto messageRequestDto, Member member) {
+        // LOG chatting 퇴장
+        log.info("{}님이 {}에 퇴장했습니다.",
+            member.getUserName(),
+            messageRequestDto.getRoomId()
+        );
+
         // 존재하는 방인지 확인
         Room room = roomRepository.findByRoomId(messageRequestDto.getRoomId()).orElseThrow(
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
@@ -122,6 +150,16 @@ public class ChatService {
     /**
      * VISITED Table 관련 메서드
      */
+    public ArrayList<String> findVisitedListAll(Room room) {
+        List<Visited> visitedList = visitedRepository.findDistinctMember_IdByRoom_RoomIdOrderByEnterAtDesc(
+            room.getRoomId());
+        ArrayList<String> usernameList = new ArrayList<>();
+        for (Visited visited : visitedList) {
+            String username = visited.getMember().getUserName();
+            usernameList.add(username);
+        }
+        return usernameList;
+    }
     public void addVisitedUser(Room room, Member member) {
         Visited visited = Visited.create(member, room);
         visitedRepository.save(visited);
