@@ -2,6 +2,7 @@ package bc.bookchat.chat.service;
 
 import bc.bookchat.chat.domain.entity.Message;
 import bc.bookchat.chat.presentation.dto.MessageEnterResponseDto;
+import bc.bookchat.chat.presentation.dto.MessageQuitResponseDto;
 import bc.bookchat.room.domain.entity.Session;
 import bc.bookchat.chat.domain.infra.MessageRepository;
 import bc.bookchat.room.domain.entity.Visited;
@@ -118,15 +119,19 @@ public class ChatService {
 
         // 채팅방 유저 리스트 가져오기
         ArrayList<String> userList = findListAll(room);
+        ArrayList<String> visitedUserList = findVisitedListAll(room);
 
-        // 전송
-        MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
+        MessageQuitResponseDto messageQuitResponseDto = MessageQuitResponseDto.toDto(
+            room.getRoomId(),
             member.getUserName(),
             adminId,
-            member.getUserName() + "님이 퇴장하셨습니다.",
-            userList
+            member.getUserName() + "님이 입장하셨습니다.",
+            userList,
+            visitedUserList
         );
-        messagingTemplate.convertAndSend("/sub/chat/rooms/" + messageRequestDto.getRoomId(), messageResponseDto);
+
+        messagingTemplate.convertAndSend("/sub/chat/rooms/" + room.getRoomId(),
+            messageQuitResponseDto);
     }
 
     /**
