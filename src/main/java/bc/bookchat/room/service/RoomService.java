@@ -2,6 +2,9 @@ package bc.bookchat.room.service;
 
 import bc.bookchat.book.entity.MajorBook;
 import bc.bookchat.book.service.BookService;
+import bc.bookchat.chat.domain.entity.Message;
+import bc.bookchat.chat.domain.infra.MessageRepository;
+import bc.bookchat.chat.presentation.dto.MessageBeforeResponseDto;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.member.entity.Member;
@@ -25,6 +28,7 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final VisitedRepository visitedRepository;
     private final BookService bookService;
+    private final MessageRepository messageRepository;
 
     @Transactional
     public RoomResponseDto createRoom(Long isbn) {
@@ -45,26 +49,8 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
-    public List<RoomResponseDto> findAll() {
-        List<Room> rooms = roomRepository.findAll();
-        List<RoomResponseDto> roomResponseDtos = new ArrayList<>();
-        for (Room r : rooms) {
-            roomResponseDtos.add(RoomResponseDto.toDto(r.getRoomId(), r.getName()));
-        }
-        return roomResponseDtos;
-    }
-
-    @Transactional(readOnly = true)
-    public RoomResponseDto findRoom(Long roomId) {
-        Room room = roomRepository.findByRoomId(roomId).orElseThrow(() -> new CustomException(
-            ErrorCode.ROOM_NOT_FOUND));
-        return RoomResponseDto.toDto(room.getRoomId(), room.getName());
-    }
-
-    @Transactional(readOnly = true)
     public List<VisitedResponseDto> findVisitedAll(Member member) {
         List<Visited> visitedList = visitedRepository.findDistinctRoom_IdByMember_UserNameOrderByEnterAtDesc(member.getUserName());
-        // List<Visited> visitedList = visitedRepository.findAllByMember_Email(member.getEmail());
         List<VisitedResponseDto> responseDtoList = new ArrayList<>();
         for (Visited visited : visitedList) {
             String roomName = visited.getRoom().getName();
@@ -75,7 +61,23 @@ public class RoomService {
         return responseDtoList;
     }
 
-    @Transactional
+    /**
+     * 채팅방 이전 채팅 목록 조회
+     */
+    @Transactional(readOnly = true)
+    public List<MessageBeforeResponseDto> findBeforeMessageAll(Long isbn) {
+        List<Message> messageList = messageRepository.findAllByRoomId(isbn);
+        List<MessageBeforeResponseDto> messageDtoList = new ArrayList<>();
+        for (Message m : messageList) {
+            MessageBeforeResponseDto dto = MessageBeforeResponseDto.toDto(m.getContent(),
+                m.getRoomId(),
+                m.getSender(),
+                m.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            messageDtoList.add(dto);
+        }
+        return messageDtoList;
+    }
+
     public void findBookOrCreate(Long isbn){
         Optional<MajorBook> book=bookService.findMajorBookByIsbn(isbn);
         if(book.isEmpty()){

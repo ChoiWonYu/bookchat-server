@@ -82,7 +82,9 @@ public class ChatService {
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
 
         // DB 저장
-        Message message = Message.create(messageRequestDto.getMessage());
+        Message message = Message.create(messageRequestDto.getMessage(),
+            room.getRoomId(),
+            member.getUserName());
         messageRepository.save(message);
 
         // 채팅방 유저 리스트 가져오기
