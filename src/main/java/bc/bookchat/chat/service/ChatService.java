@@ -30,12 +30,7 @@ public class ChatService {
     private final VisitedRepository visitedRepository;
     private final SimpMessageSendingOperations messagingTemplate;
 
-    private static String adminId;
-
-    @Autowired
-    public void setAdminId() {
-        ChatService.adminId = "관리자";
-    }
+    private final static String adminId = "1";
 
     @Transactional
     public void enter(MessageRequestDto messageRequestDto, Member member) {
