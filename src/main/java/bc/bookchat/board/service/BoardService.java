@@ -49,7 +49,7 @@ public class BoardService {
         return boardRepository.save(boardCreateRequest.toEntity(member,book.get()));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Board viewBoardDetail(UUID boardId) {
         Board board=getBoardDetail(boardId);
         board.increaseViews();
