@@ -14,6 +14,5 @@ public class MessageRequestDto {
     @NotBlank
     private String sessionId;
     @NotBlank
-    @Size(max = 20)
     private String message;
 }
