@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -19,11 +21,11 @@ public class Message {
     private String content;
 
     @Column(name = "create_at")
-    private LocalDate createAt;
+    private LocalDateTime createAt;
 
     @PrePersist
     protected void onCreate() {
-        createAt = LocalDate.now();
+        createAt = LocalDateTime.now();
     }
 
     private Message(String content) {

@@ -63,11 +63,12 @@ public class RoomService {
 
     @Transactional(readOnly = true)
     public List<VisitedResponseDto> findVisitedAll(Member member) {
-        List<Visited> visitedList = visitedRepository.findAllByMember_Email(member.getEmail());
+        List<Visited> visitedList = visitedRepository.findDistinctRoom_IdByMember_UserNameOrderByEnterAtDesc(member.getUserName());
+        // List<Visited> visitedList = visitedRepository.findAllByMember_Email(member.getEmail());
         List<VisitedResponseDto> responseDtoList = new ArrayList<>();
         for (Visited visited : visitedList) {
             String roomName = visited.getRoom().getName();
-            String enterAt = visited.getEnterAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+            String enterAt = visited.getEnterAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             VisitedResponseDto responseDto = VisitedResponseDto.create(roomName, enterAt);
             responseDtoList.add(responseDto);
         }
