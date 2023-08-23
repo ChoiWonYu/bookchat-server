@@ -7,18 +7,14 @@ import lombok.Setter;
 @Getter
 public class StompPrincipal implements Principal {
 
-    private final String name;
-    @Setter
-    private String username;
-    @Setter
-    private String roomId;
+    private final String sessionId;
 
-    public StompPrincipal(String name) {
-        this.name = name;
+    public StompPrincipal(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     @Override
     public String getName() {
-        return this.name;
+        return this.sessionId;
     }
 }
