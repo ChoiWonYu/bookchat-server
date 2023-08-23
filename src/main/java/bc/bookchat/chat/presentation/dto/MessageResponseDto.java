@@ -7,24 +7,24 @@ import lombok.Getter;
 public class MessageResponseDto {
     private Long roomId;
     private String sender;
-    private String sessionId;
+    private boolean isAdmin;
     private String message;
     private ArrayList<String> onlineUserList;
 
-    private MessageResponseDto(Long roomId, String sender, String session, String message,
+    private MessageResponseDto(Long roomId, String sender, boolean isAdmin, String message,
         ArrayList<String> onlineUserList) {
         this.roomId = roomId;
         this.sender = sender;
-        this.sessionId = session;
+        this.isAdmin = isAdmin;
         this.message = message;
         this.onlineUserList = onlineUserList;
     }
 
     public static MessageResponseDto toDto(Long roomId,
         String sender,
-        String sessionId,
+        boolean isAdmin,
         String message,
         ArrayList<String> onlineUserList) {
-        return new MessageResponseDto(roomId, sender, sessionId, message, onlineUserList);
+        return new MessageResponseDto(roomId, sender, isAdmin, message, onlineUserList);
     }
 }

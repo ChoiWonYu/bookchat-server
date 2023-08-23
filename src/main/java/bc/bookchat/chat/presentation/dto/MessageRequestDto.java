@@ -12,8 +12,6 @@ import lombok.Setter;
 public class MessageRequestDto {
     private Long roomId;
     @NotBlank
-    private String sessionId;
-    @NotBlank
     @Size(max = 20)
     private String message;
 }
