@@ -10,16 +10,13 @@ import bc.bookchat.chat.presentation.dto.MessageResponseDto;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.member.entity.Member;
-import bc.bookchat.member.repository.MemberRepository;
 import bc.bookchat.room.domain.entity.Room;
 import bc.bookchat.room.domain.repository.RoomRepository;
 import bc.bookchat.room.domain.repository.VisitedRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +34,7 @@ public class ChatService {
 
     @Autowired
     public void setAdminId() {
-        ChatService.adminId = UUID.randomUUID().toString();
+        ChatService.adminId = "관리자";
     }
 
     @Transactional
