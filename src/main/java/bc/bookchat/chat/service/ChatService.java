@@ -16,6 +16,7 @@ import bc.bookchat.room.domain.repository.VisitedRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ChatService {
     private final MessageRepository messageRepository;
     private final RoomRepository roomRepository;
@@ -34,6 +36,12 @@ public class ChatService {
 
     @Transactional
     public void enter(MessageRequestDto messageRequestDto, Member member) {
+        // LOG chatting 입장
+        log.info("{}님이 {}에 입장했습니다.",
+            member.getUserName(),
+            messageRequestDto.getRoomId()
+            );
+
         // IS NULL 존재하는 방인지 확인
         Room room = roomRepository.findByRoomId(messageRequestDto.getRoomId()).orElseThrow(
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
@@ -57,6 +65,13 @@ public class ChatService {
 
     @Transactional
     public void publish(MessageRequestDto messageRequestDto, Member member) {
+        // LOG chatting 메세지
+        log.info("[ {} 채팅방 ] {} : {}",
+            messageRequestDto.getRoomId(),
+            member.getUserName(),
+            messageRequestDto.getMessage()
+            );
+
         // 존재하는 방인지 확인
         Room room = roomRepository.findByRoomId(messageRequestDto.getRoomId()).orElseThrow(
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
@@ -81,6 +96,12 @@ public class ChatService {
 
     @Transactional
     public void quit(MessageRequestDto messageRequestDto, Member member) {
+        // LOG chatting 퇴장
+        log.info("{}님이 {}에 퇴장했습니다.",
+            member.getUserName(),
+            messageRequestDto.getRoomId()
+        );
+
         // 존재하는 방인지 확인
         Room room = roomRepository.findByRoomId(messageRequestDto.getRoomId()).orElseThrow(
             () -> new CustomException(ErrorCode.ROOM_NOT_FOUND));
