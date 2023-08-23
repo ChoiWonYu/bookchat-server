@@ -10,13 +10,13 @@ import bc.bookchat.chat.presentation.dto.MessageResponseDto;
 import bc.bookchat.common.exception.CustomException;
 import bc.bookchat.common.exception.ErrorCode;
 import bc.bookchat.member.entity.Member;
-import bc.bookchat.member.repository.MemberRepository;
 import bc.bookchat.room.domain.entity.Room;
 import bc.bookchat.room.domain.repository.RoomRepository;
 import bc.bookchat.room.domain.repository.VisitedRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +29,13 @@ public class ChatService {
     private final SessionRepository sessionRepository;
     private final VisitedRepository visitedRepository;
     private final SimpMessageSendingOperations messagingTemplate;
+
+    private static String adminId;
+
+    @Autowired
+    public void setAdminId() {
+        ChatService.adminId = "관리자";
+    }
 
     @Transactional
     public void enter(MessageRequestDto messageRequestDto, Member member) {
@@ -46,6 +53,7 @@ public class ChatService {
         // 전송
         MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
             member.getUserName(),
+            adminId,
             member.getUserName() + "님이 입장하셨습니다.",
             userList
         );
@@ -68,6 +76,7 @@ public class ChatService {
         // 전송
         MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
             member.getUserName(),
+            messageRequestDto.getSessionId(),
             messageRequestDto.getMessage(),
             userList
         );
@@ -90,6 +99,7 @@ public class ChatService {
         // 전송
         MessageResponseDto messageResponseDto = MessageResponseDto.toDto(room.getRoomId(),
             member.getUserName(),
+            adminId,
             member.getUserName() + "님이 퇴장하셨습니다.",
             userList
         );
