@@ -31,6 +31,7 @@ public class Board extends BaseEntity {
 
     private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     private String imageUrl;
